@@ -1,6 +1,8 @@
+import { db } from "../../server.js"
+
 export default {
     addMessage: (req, res) => {
-
+        
     },
 
     getMessages: (req, res) => {
@@ -8,6 +10,6 @@ export default {
     },
 
     addStatus: (req, res) => {
-        
+
     },
 }

@@ -1,18 +1,19 @@
 import express from 'express'
 let router = express.Router()
-import userController from './controllers/userController.js'
-import messagesController from './controllers/messagesController.js'
+import UserController from './controllers/UserController.js'
+import MessagesController from './controllers/MessagesController.js'
+import { userValidation } from './middlewares/userValidation.js'
 
 router.get('/', (req, res) => {
     res.send("Bate Papo Uol")
 })
 
-router.post('/participants', userController.addParticipant)
-router.get('/participants', userController.getParticipants)
+router.post('/participants', userValidation, UserController.addParticipant)
+router.get('/participants', UserController.getParticipants)
 
-router.post('/messages', messagesController.addMessage)
-router.get('/messages', messagesController.getMessages)
+router.post('/messages', MessagesController.addMessage)
+router.get('/messages', MessagesController.getMessages)
 
-router.post('/status', messagesController.addStatus)
+router.post('/status', MessagesController.addStatus)
 
 export default router
