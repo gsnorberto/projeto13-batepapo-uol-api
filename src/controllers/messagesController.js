@@ -24,7 +24,7 @@ export default {
         let { limit } = req.query
 
         try {
-            // Filter messages send by user, or "to Todos", or "to User"
+            // Filter messages send by User, or "to Todos", or "to User"
             let messages = await db.collection('messages').find({ $or: [{ from: user }, { to: { $in: ["Todos",user] } }] }).toArray()
 
             // Return limit number of messages passed by user
@@ -32,16 +32,27 @@ export default {
                 return res.status(200).json(messages.slice(messages.length - limit, messages.length))
             }
 
-            console.log(messages)
             return res.status(200).json(messages)
         } catch (err) {
             return res.sendStatus(500)
         }
-
-
     },
 
-    addStatus: (req, res) => {
+    addStatus: async (req, res) => {
+        let { user } = req.headers
 
+        try{
+            let participant = await db.collection('participants').findOne({ name: user })
+
+            // participant not found
+            if(!participant) return res.sendStatus(404);
+
+            // update last Status
+            await db.collection('participants').updateOne({name: user}, {$set: {lastStatus: Date.now()}});
+
+            res.sendStatus(200)
+        } catch(err){
+            return res.sendStatus(500)
+        }
     },
 }
