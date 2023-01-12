@@ -4,14 +4,14 @@ import dayjs from "dayjs"
 export default {
     addMessage: async (req, res) => {
         let { to, text, type } = req.body
-        let { from } = req.headers
+        let { user } = req.headers
         try {
             // search the participant in the database
-            let participant = await db.collection('participants').findOne({ name: from })
+            let participant = await db.collection('participants').findOne({ name: user })
             if (!participant) return res.sendStatus(401) // not found
 
             // Register message
-            let message = { from, to, text, type, time: dayjs().format('HH:mm:ss') }
+            let message = { from: user, to, text, type, time: dayjs().format('HH:mm:ss') }
             await db.collection('messages').insertOne(message)
             res.sendStatus(201)
         } catch (err) {
