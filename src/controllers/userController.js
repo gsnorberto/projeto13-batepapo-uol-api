@@ -14,11 +14,16 @@ export default {
             await db.collection('participants').insertOne(data)
             res.sendStatus(201)
         } catch(err){
-            return res.status(500).send("Erro interno do servidor")
+            return res.sendStatus(500)
         }
     },
 
-    getParticipants: (req, res) => {
-        
+    getParticipants: async (req, res) => {
+        try{
+            let data = await db.collection('participants').find().toArray();
+            res.status(200).json(data)
+        } catch(err){
+            return res.sendStatus(500)
+        }
     }
 }
