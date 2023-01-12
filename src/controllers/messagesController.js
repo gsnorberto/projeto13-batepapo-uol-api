@@ -11,7 +11,7 @@ export default {
             if (!participant) return res.sendStatus(401) // not found
 
             // Register message
-            let message = {from, to, text, type, time: dayjs().format('HH:mm:ss')}
+            let message = { from, to, text, type, time: dayjs().format('HH:mm:ss') }
             await db.collection('messages').insertOne(message)
             res.sendStatus(201)
         } catch (err) {
@@ -19,7 +19,25 @@ export default {
         }
     },
 
-    getMessages: (req, res) => {
+    getMessages: async (req, res) => {
+        let { user } = req.headers
+        let { limit } = req.query
+
+        try {
+            // Filter messages send by user, or "to Todos", or "to User"
+            let messages = await db.collection('messages').find({ $or: [{ from: user }, { to: { $in: ["Todos",user] } }] }).toArray()
+
+            // Return limit number of messages passed by user
+            if (limit && limit < messages.length) {
+                return res.status(200).json(messages.slice(messages.length - limit, messages.length))
+            }
+
+            console.log(messages)
+            return res.status(200).json(messages)
+        } catch (err) {
+            return res.sendStatus(500)
+        }
+
 
     },
 

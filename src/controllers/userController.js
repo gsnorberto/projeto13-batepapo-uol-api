@@ -1,4 +1,5 @@
 import { db } from "../app.js";
+import dayjs from "dayjs"
 
 export default {
     addParticipant: async (req, res) => {
@@ -12,6 +13,11 @@ export default {
             // Register participant
             const data = { name, lastStatus: Date.now() }
             await db.collection('participants').insertOne(data)
+
+            // Register status message
+            let message = {from: name, to: 'Todos', text: 'entra na sala...', type: 'status', time: dayjs().format('HH:mm:ss')}
+            await db.collection('messages').insertOne(message)
+
             res.sendStatus(201)
         } catch(err){
             return res.sendStatus(500)
