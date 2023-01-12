@@ -7,6 +7,6 @@ export const userValidation = (req, res, next) => {
     if(error == null) {
         next();
     } else {
-        res.status(422).json({ error: "name deve ser string não vazio" });
+        res.status(422).json({ error: "Dados inválidos" });
     }
 }
