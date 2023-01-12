@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }))
 export let db;
 data.connectToDb((err) => {
     if (!err) {
-        let PORT = process.env.PORT
+        let PORT = 5000
 
         app.listen(PORT, () => {
             console.log(`Servidor executando na porta ${PORT}`)
@@ -24,7 +24,7 @@ data.connectToDb((err) => {
 
         db = data.getDb()
         
-        removeParticipants();
+        //removeParticipants();
         setInterval(removeParticipants, 15000);
     }
 })
