@@ -1,4 +1,4 @@
-import apiRoutes from './src/routes.js';
+import apiRoutes from './routes.js';
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'

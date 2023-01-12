@@ -1,23 +1,24 @@
-import { db } from "../../server.js"
+import { db } from "../app.js";
 
 export default {
-    addParticipant: (req, res) => {
-        const data = {
-            name: req.body.name,
-            lastStatus: Date.now()
+    addParticipant: async (req, res) => {
+        let { name } = req.body;
+
+        try{
+            // search for participants with the same name
+            let participant = await db.collection('participants').findOne({ name })
+            if(participant) return res.status(409).send("Nome já cadastrado")
+
+            // Register participant
+            const data = { name, lastStatus: Date.now() }
+            await db.collection('participants').insertOne(data)
+            res.sendStatus(201)
+        } catch(err){
+            return res.status(500).send("Erro interno do servidor")
         }
-        
-        db.collection('participants')
-            .insertOne(data)
-            .then(() => {
-                res.sendStatus(201)
-            })
-            .catch(() => {
-                res.status(500).json({ error: 'Não pode cadastrar a cidade' })
-            })
     },
 
     getParticipants: (req, res) => {
-
+        
     }
 }

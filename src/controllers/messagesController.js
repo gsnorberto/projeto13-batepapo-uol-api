@@ -1,4 +1,4 @@
-import { db } from "../../server.js"
+import { db } from "../app.js";
 
 export default {
     addMessage: (req, res) => {
