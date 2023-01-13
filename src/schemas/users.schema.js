@@ -1,5 +1,5 @@
 import Joi from "joi";
 
-export default Joi.object({
+export const postUserSchema = Joi.object({
     name: Joi.string().required()
 })

@@ -1,8 +1,8 @@
 
-import usersSchema from '../schemas/users.schema.js'
+import { postUserSchema } from '../schemas/users.schema.js'
 
-export const userValidation = (req, res, next) => {
-    const { error } = usersSchema.validate(req.body)
+export const postUserValidation = (req, res, next) => {
+    const { error } = postUserSchema.validate(req.body)
 
     if(error == null) {
         next();

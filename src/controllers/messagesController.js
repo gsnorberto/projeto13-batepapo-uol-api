@@ -55,8 +55,6 @@ export default {
         try{
             let message = await db.collection('messages').findOne({_id: ObjectId(idMessage)})
 
-            console.log(message);
-
             if(!message){
                 return res.sendStatus(404) // message not found
             } else if (message.from != user){
@@ -65,6 +63,35 @@ export default {
 
             await db.collection('messages').deleteOne({_id: ObjectId(idMessage)});
             res.sendStatus(202) // successfully deleted message
+        } catch(err){
+            return res.sendStatus(500)
+        }
+    },
+
+    putMessage: async (req, res) => {
+        let to = stripHtml(req.body.to.trim()).result
+        let text = stripHtml(req.body.text.trim()).result
+        let type = stripHtml(req.body.type.trim()).result
+        let user = stripHtml(req.headers.user.trim()).result
+        let idMessage = req.params.ID_DA_MENSAGEM
+
+        let participant = await db.collection('participants').findOne({name: user})
+
+        if(!participant){
+            return res.sendStatus(401) // unauthorized
+        }
+
+        try{
+            let message = await db.collection('messages').findOne({_id: ObjectId(idMessage)})
+
+            if(!message){
+                return res.sendStatus(404) // message not found
+            } else if (message.from != user){
+                return res.sendStatus(401) // User is not the owner of the message
+            }
+
+            await db.collection('messages').updateOne({_id: ObjectId(idMessage)}, { $set: { text }})
+            res.sendStatus(201)
         } catch(err){
             return res.sendStatus(500)
         }
