@@ -1,9 +1,11 @@
-import { db } from "../app.js";
+import { db } from "../app.js"
 import dayjs from "dayjs"
+
+import { stripHtml } from "string-strip-html";
 
 export default {
     addParticipant: async (req, res) => {
-        let { name } = req.body;
+        let name = stripHtml(req.body.name.trim()).result
 
         try{
             // search for participants with the same name
@@ -26,7 +28,7 @@ export default {
 
     getParticipants: async (req, res) => {
         try{
-            let data = await db.collection('participants').find().toArray();
+            let data = await db.collection('participants').find().toArray()
             res.status(200).json(data)
         } catch(err){
             return res.sendStatus(500)

@@ -1,10 +1,15 @@
-import { db } from "../app.js";
+import { db } from "../app.js"
 import dayjs from "dayjs"
+
+import { stripHtml } from "string-strip-html"
 
 export default {
     addMessage: async (req, res) => {
-        let { to, text, type } = req.body
-        let { user } = req.headers
+        let to = stripHtml(req.body.to.trim()).result
+        let text = stripHtml(req.body.text.trim()).result
+        let type = stripHtml(req.body.type.trim()).result
+        let user = stripHtml(req.headers.user.trim()).result
+
         try {
             // search the participant in the database
             let participant = await db.collection('participants').findOne({ name: user })
@@ -20,8 +25,8 @@ export default {
     },
 
     getMessages: async (req, res) => {
-        let { user } = req.headers
-        let { limit } = req.query
+        let user = stripHtml(req.headers.user.trim()).result
+        let limit = stripHtml(req.query.limit.trim()).result
 
         try {
             // Filter messages send by User, or "to Todos", or "to User"
@@ -39,8 +44,8 @@ export default {
     },
 
     addStatus: async (req, res) => {
-        let { user } = req.headers
-
+        let user = req.headers.user.trim()
+ 
         try{
             let participant = await db.collection('participants').findOne({ name: user })
 

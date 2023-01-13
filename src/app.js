@@ -36,7 +36,7 @@ const removeParticipants = async () => {
     let participants = await db.collection('participants').find().toArray()
     let dateNow = Date.now()
 
-    console.log("executando...");
+    //console.log("executando...");
 
     for (let participant of participants) {
 
