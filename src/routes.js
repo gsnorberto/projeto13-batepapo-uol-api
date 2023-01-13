@@ -14,6 +14,7 @@ router.get('/participants', UserController.getParticipants)
 
 router.post('/messages', messageValidation, MessagesController.addMessage)
 router.get('/messages', MessagesController.getMessages)
+router.delete('/messages/:ID_DA_MENSAGEM', MessagesController.deleteMessage)
 
 router.post('/status', MessagesController.addStatus)
 

@@ -1,5 +1,6 @@
 import { db } from "../app.js"
 import dayjs from "dayjs"
+import { ObjectId } from "mongodb"
 
 import { stripHtml } from "string-strip-html"
 
@@ -39,6 +40,32 @@ export default {
 
             return res.status(200).json(messages)
         } catch (err) {
+            return res.sendStatus(500)
+        }
+    },
+
+    deleteMessage: async (req, res) => {
+        let user = stripHtml(req.headers.user.trim()).result
+        let idMessage = req.params.ID_DA_MENSAGEM
+
+        if(!user){
+            return res.status(422).json({ error: "Dados inválidos" });
+        }
+
+        try{
+            let message = await db.collection('messages').findOne({_id: ObjectId(idMessage)})
+
+            console.log(message);
+
+            if(!message){
+                return res.sendStatus(404) // message not found
+            } else if (message.from != user){
+                return res.sendStatus(401) // User is not the owner of the message
+            }
+
+            await db.collection('messages').deleteOne({_id: ObjectId(idMessage)});
+            res.sendStatus(202) // successfully deleted message
+        } catch(err){
             return res.sendStatus(500)
         }
     },
