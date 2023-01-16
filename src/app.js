@@ -2,8 +2,9 @@ import apiRoutes from './routes.js';
 import express from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import data from './db.js'
+//import data from './db.js'
 import dayjs from "dayjs"
+import { MongoClient } from 'mongodb'
 
 dotenv.config()
 
@@ -14,20 +15,38 @@ app.use(express.urlencoded({ extended: true }))
 
 // MongoDB Connection
 export let db;
-data.connectToDb((err) => {
-    if (!err) {
-        let PORT = 5000
 
+const mongoClient = new MongoClient(process.env.DATABASE_URL)
+mongoClient.connect()
+    .then((mongoClient) => {
+        db = mongoClient.db()
+
+        let PORT = 5000
         app.listen(PORT, () => {
             console.log(`Servidor executando na porta ${PORT}`)
         })
 
-        db = data.getDb() 
-        
         //removeParticipants();
         setInterval(removeParticipants, 15000);
-    }
-})
+    })
+    .catch(err => {
+        console.log(err)
+    })
+
+// data.connectToDb((err) => {
+//     if (!err) {
+//         let PORT = 5000
+
+//         app.listen(PORT, () => {
+//             console.log(`Servidor executando na porta ${PORT}`)
+//         })
+
+//         db = data.getDb()
+
+//         //removeParticipants();
+//         setInterval(removeParticipants, 15000);
+//     }
+// })
 
 app.use("/", apiRoutes)
 
