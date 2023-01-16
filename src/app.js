@@ -22,7 +22,7 @@ data.connectToDb((err) => {
             console.log(`Servidor executando na porta ${PORT}`)
         })
 
-        db = data.getDb()
+        db = data.getDb() 
         
         //removeParticipants();
         setInterval(removeParticipants, 15000);
