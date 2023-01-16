@@ -17,6 +17,6 @@ router.get('/messages', MessagesController.getMessages)
 router.delete('/messages/:ID_DA_MENSAGEM', MessagesController.deleteMessage)
 router.put('/messages/:ID_DA_MENSAGEM', putMessageValidation, MessagesController.putMessage)
 
-router.post('/status', MessagesController.addStatus)
+router.post('/status', MessagesController.addStatus) 
 
 export default router
