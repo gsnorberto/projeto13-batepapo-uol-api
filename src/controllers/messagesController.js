@@ -62,7 +62,7 @@ export default {
             }
 
             await db.collection('messages').deleteOne({_id: ObjectId(idMessage)});
-            res.sendStatus(202) // successfully deleted message
+            res.sendStatus(200) // successfully deleted message
         } catch(err){
             return res.sendStatus(500)
         }
@@ -91,7 +91,7 @@ export default {
             }
 
             await db.collection('messages').updateOne({_id: ObjectId(idMessage)}, { $set: { text }})
-            res.sendStatus(201)
+            res.sendStatus(200)
         } catch(err){
             return res.sendStatus(500)
         }
