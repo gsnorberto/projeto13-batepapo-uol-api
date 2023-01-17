@@ -27,8 +27,16 @@ export default {
 
     getMessages: async (req, res) => {
         let user = stripHtml(req.headers.user.trim()).result
-        let limit = stripHtml(req.query.limit.trim()).result
+        let limit;
 
+        if(req.query.limit){
+            limit = Number(stripHtml(req.query.limit.trim()).result)
+
+            if(!limit || limit <= 0){
+                return res.status(422).json({ error: "Dados inválidos" });
+            }
+        }
+        
         try {
             // Filter messages send by User, or "to Todos", or "to User"
             let messages = await db.collection('messages').find({ $or: [{ from: user }, { to: { $in: ["Todos",user] } }] }).toArray()
