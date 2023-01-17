@@ -9,12 +9,18 @@ export default {
         let to = stripHtml(req.body.to.trim()).result
         let text = stripHtml(req.body.text.trim()).result
         let type = stripHtml(req.body.type.trim()).result
-        let user = stripHtml(req.headers.user.trim()).result
+        let user;
+
+        if(req.headers.user){
+            user = stripHtml(req.headers.user.trim()).result
+        } else {
+            res.status(422).json({ error: "Dados inválidos" });
+        }
 
         try {
             // search the participant in the database
             let participant = await db.collection('participants').findOne({ name: user })
-            if (!participant) return res.sendStatus(401) // not found
+            if (!participant) return res.sendStatus(422) // not found
 
             // Register message
             let message = { from: user, to, text, type, time: dayjs().format('HH:mm:ss') }

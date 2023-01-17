@@ -3,7 +3,7 @@ let router = express.Router()
 import userController from './controllers/userController.js'
 import messagesController from './controllers/messagesController.js'
 import { postUserValidation } from './middlewares/userValidation.js'
-import { postMessageValidation, putMessageValidation, getMessageValidation } from './middlewares/messageValidation.js'
+import { postMessageValidation, putMessageValidation } from './middlewares/messageValidation.js'
 
 router.get('/', (req, res) => {
     res.send("Bate Papo Uol")
